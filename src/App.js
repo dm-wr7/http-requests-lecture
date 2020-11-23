@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import './App.css'
 import PokemonList from './components/PokemonList'
 import Pokemon from './components/Pokemon'
+import axios from 'axios'
 
 class App extends Component {
   constructor() {
@@ -21,11 +22,35 @@ class App extends Component {
     )
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.getPokemonList()
+  }
 
-  getPokemonList(e) {}
+  getPokemonList(e) {
+    e && e.preventDefault()
+    axios
+      .get(`https://pokeapi.co/api/v2/pokemon?limit=${this.state.listLimit}`)
+      .then((res) => {
+        this.setState({
+          pokemonList: res.data.results,
+        })
+      })
+  }
 
-  getSinglePokemon(e) {}
+  getSinglePokemon(e) {
+    e && e.preventDefault()
+
+    axios
+      .get(`https://pokeapi.co/api/v2/pokemon/${this.state.pokemonId}`)
+      .then((res) => {
+        this.setState({
+          singlePokemon: res.data,
+        })
+      })
+      .catch((err) => {
+        alert('Pokemon does not exist')
+      })
+  }
 
   handlePokemonIdChange(e) {
     this.setState({
